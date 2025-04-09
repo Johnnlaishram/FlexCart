@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["FlexCart"] = "Sign in";
+}
+
+<h1>@ViewData["FlexCart"]</h1>
+
+<form method="post" asp-action="Login" asp-controller="Home">
+    <label for="Id">cus_id:</label>
+    <input id="Id"name="cus_ID" type="text" required />
+
+    <br/><br />
+
+    <label for="Password">password:</label>
+    <input id="password" name="Passsword" type="text" required />
+
+    <br/><br />
+
+
+    <input type="submit" value="Submit" />
+</form>
