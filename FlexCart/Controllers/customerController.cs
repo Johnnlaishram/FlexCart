@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace FlexCart.Controllers
 {
@@ -44,5 +45,53 @@ namespace FlexCart.Controllers
             }
             return View(customer);
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            return View(customer);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, Customer customer)
+        {
+            if (id != customer.CusId)
+            {
+                return BadRequest("incorrect ID");
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC update_customer @cus_id,@name,@email,@address,@mobile",
+                        new SqlParameter("@cus_id",customer.CusId),
+                        new SqlParameter("@name", customer.Name),
+                        new SqlParameter("@email", customer.Email),
+                        new SqlParameter("@address", customer.Address),
+                        new SqlParameter("@mobile", customer.Mobile));
+                    await _context.SaveChangesAsync();
+                    TempData["successMessage"] = "Edit sucessfully";
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            return View(customer);
+        }
+
     }
+
 }

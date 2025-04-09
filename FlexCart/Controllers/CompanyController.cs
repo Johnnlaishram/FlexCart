@@ -30,7 +30,11 @@ namespace FlexCart.Controllers
         {
             return View();
         }
-       
+        public IActionResult Delete()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(Company company)
         {
@@ -47,7 +51,7 @@ namespace FlexCart.Controllers
                 TempData["SuccessMessage"] = "Company added successfully!";
                 return RedirectToAction("Index");
             }
-           
+
             return View(company);
 
         }
@@ -76,7 +80,7 @@ namespace FlexCart.Controllers
                 {
                     await _context.Database.ExecuteSqlRawAsync(
                         "EXEC update_company @CompanyId, @CompanyName, @Mobile, @addr, @web, @Email",
-                        new SqlParameter("@CompanyId", System.Data.SqlDbType.Int) { Value = company.CompanyId },
+                        new SqlParameter("@CompanyId", (company.CompanyId.ToString().Trim())),
                         new SqlParameter("@CompanyName", company.CompanyName),
                         new SqlParameter("@Mobile", company.Mobile),
                         new SqlParameter("@addr", company.Addr),
@@ -102,6 +106,43 @@ namespace FlexCart.Controllers
 
             return View(company);
         }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                return NotFound();  // If no company found, return 404
+            }
+            return View(company);  // Pass the company data to the view
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Confirmed_Delete(int id)
+        {
+            var company = await _context.Companies.FindAsync(id);
+
+            if (company == null)
+            {
+                return NotFound(); // Prevent deleting a non-existent record
+            }
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC delete_company @CompanyId",
+                    new SqlParameter("@CompanyId", id)); // Pass int directly, no need to convert
+
+                TempData["SuccessMessage"] = "Company deleted successfully!";
+                return RedirectToAction("Index"); // Redirect to company list after deletion
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Error deleting company: " + ex.Message;
+                return View(company); // Stay on the same page if an error occurs
+            }
+        }
+
 
     }
-}
+} 
