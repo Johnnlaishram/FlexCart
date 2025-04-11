@@ -20,4 +20,5 @@ public partial class Customer
     [Required(ErrorMessage = "Mobile is Required.")]
     [StringLength(10)]
     public string? Mobile { get; set; }=string.Empty ;
+    public string? Password {  get; set; }=string.Empty;    
 }

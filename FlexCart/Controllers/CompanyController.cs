@@ -32,6 +32,9 @@ namespace FlexCart.Controllers
         }
         public IActionResult Delete()
         {
+
+
+
             return View();
         }
 
@@ -80,7 +83,7 @@ namespace FlexCart.Controllers
                 {
                     await _context.Database.ExecuteSqlRawAsync(
                         "EXEC update_company @CompanyId, @CompanyName, @Mobile, @addr, @web, @Email",
-                        new SqlParameter("@CompanyId", (company.CompanyId.ToString().Trim())),
+                        new SqlParameter("@CompanyId", Convert.ToInt32(company.CompanyId)),
                         new SqlParameter("@CompanyName", company.CompanyName),
                         new SqlParameter("@Mobile", company.Mobile),
                         new SqlParameter("@addr", company.Addr),
@@ -108,16 +111,17 @@ namespace FlexCart.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
-        {
+           {
             var company = await _context.Companies.FindAsync(id);
             if (company == null)
             {
                 return NotFound();  // If no company found, return 404
             }
-            return View(company);  // Pass the company data to the view
+             return View(company);  // Pass the company data to the view
         }
 
         [HttpPost]
+      
         public async Task<IActionResult> Confirmed_Delete(int id)
         {
             var company = await _context.Companies.FindAsync(id);
@@ -139,10 +143,11 @@ namespace FlexCart.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "Error deleting company: " + ex.Message;
-                return View(company); // Stay on the same page if an error occurs
+                return RedirectToAction("Delete", new { id }); // ? Redirect to the delete confirmation page
             }
+;                              // Stay on the same page if an error occurs
+        }
         }
 
 
     }
-} 

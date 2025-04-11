@@ -96,6 +96,11 @@ public partial class OnlineDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("name");
+           entity.Property(e => e.Password) // ADD THIS
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("password");
+
         });
 
         modelBuilder.Entity<Product>(entity =>

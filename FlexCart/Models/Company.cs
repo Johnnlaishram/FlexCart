@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace FlexCart.Models;
 
+[Table("company")]
 public partial class Company
 {
     [Key]

@@ -5,56 +5,52 @@
 }
 
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Delete</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Company</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
-<body>
+<body class="container mt-5">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Company</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompanyName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CompanyName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Mobile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Mobile)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Addr)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Addr)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Web)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Web)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="CompanyId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+    <div class="card shadow-lg p-4">
+        <h3 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Are you sure you want to delete this?</h3>
+        <div class="card-body">
+            <h4 class="text-primary">Company Details</h4>
+            <hr>
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Company Name</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.CompanyName)</dd>
+
+                <dt class="col-sm-3 fw-bold">Mobile</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Mobile)</dd>
+
+                <dt class="col-sm-3 fw-bold">Address</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Addr)</dd>
+
+                <dt class="col-sm-3 fw-bold">Email</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+
+                <dt class="col-sm-3 fw-bold">Website</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Web)</dd>
+            </dl>
+
+            <form asp-action="Confirmed_Delete" asp-controller="Company" method="post">
+                <input type="hidden" name="id" asp-for="CompanyId" />
+
+                <div class="d-flex justify-content-start gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
