@@ -44,7 +44,7 @@ namespace FlexCart.Controllers
             if (ModelState.IsValid)
             {
                 await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC insert_company @CompanyName, @Mobile, @addr,@web,@Email",
+                    "EXEC insert_company @CompanyName, @Mobile, @addr,@Email,@web",
                     new SqlParameter("@CompanyName", company.CompanyName),
                     new SqlParameter("@Mobile", company.Mobile),
                     new SqlParameter("@addr", company.Addr),
@@ -82,7 +82,7 @@ namespace FlexCart.Controllers
                 try
                 {
                     await _context.Database.ExecuteSqlRawAsync(
-                        "EXEC update_company @CompanyId, @CompanyName, @Mobile, @addr, @web, @Email",
+                        "EXEC update_company @CompanyId, @CompanyName, @Mobile, @addr, @Email,@web",
                         new SqlParameter("@CompanyId", Convert.ToInt32(company.CompanyId)),
                         new SqlParameter("@CompanyName", company.CompanyName),
                         new SqlParameter("@Mobile", company.Mobile),

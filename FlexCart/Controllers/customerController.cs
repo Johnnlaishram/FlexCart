@@ -39,10 +39,10 @@ namespace FlexCart.Controllers
             if (ModelState.IsValid)
             {
                 await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC insert_customer @name, @email, @address, @mobile,@password",
+                    "EXEC insert_customer @name, @address, @email, @mobile,@password",
                     new SqlParameter("@name", customer.Name),
-                    new SqlParameter("@email", customer.Email),
                     new SqlParameter("@address", customer.Address),
+                    new SqlParameter("@email", customer.Email),
                     new SqlParameter("@mobile", customer.Mobile),
                     new SqlParameter("@password",customer.Password));
                 await _context.SaveChangesAsync();
@@ -73,12 +73,13 @@ namespace FlexCart.Controllers
                 try
                 {
                     await _context.Database.ExecuteSqlRawAsync(
-                        "EXEC update_customer @cus_id,@name,@email,@address,@mobile",
+                        "EXEC update_customer @cus_id,@name,@address,@email,@mobile,@password",
                         new SqlParameter("@cus_id",customer.CusId),
                         new SqlParameter("@name", customer.Name),
-                        new SqlParameter("@email", customer.Email),
-                        new SqlParameter("@address", customer.Address),
-                        new SqlParameter("@mobile", customer.Mobile));
+                        new SqlParameter("@address", customer.Email),
+                        new SqlParameter("@email", customer.Address),
+                        new SqlParameter("@mobile", customer.Mobile),
+                        new SqlParameter("@password", customer.Password));
                     await _context.SaveChangesAsync();
                     TempData["successMessage"] = "Edit sucessfully";
                     return RedirectToAction("Index");
