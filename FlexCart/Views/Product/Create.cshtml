@@ -1,0 +1,74 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model FlexCart.Models.Product
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-success text-white text-center rounded-top-4">
+                    <h3 class="mb-0"><i class="fas fa-box"></i> Add New Product</h3>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="post" asp-action="Create" asp-controller="Product">
+                        <div class="mb-3">
+                            <label asp-for="ProdName" class="form-label fw-semibold">Product Name</label>
+                            <input asp-for="ProdName" class="form-control shadow-sm" placeholder="Enter product name" required />
+                            <span asp-validation-for="ProdName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ManfDate" class="form-label fw-semibold">Manufacture Date</label>
+                            <input asp-for="ManfDate" type="date" class="form-control shadow-sm" />
+                            <span asp-validation-for="ManfDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Barcode" class="form-label fw-semibold">Barcode</label>
+                            <input asp-for="Barcode" class="form-control shadow-sm" placeholder="Enter barcode" />
+                            <span asp-validation-for="Barcode" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ProdPhoto" type="file" class="form-label fw-semibold">Image URL</label>
+                            <input asp-for="ProdPhoto" class="form-control shadow-sm" placeholder="Enter image URL" />
+                            <span asp-validation-for="ProdPhoto" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ProdTypeId" class="form-label fw-semibold">Product Type ID</label>
+                            <input asp-for="ProdTypeId" type="number" class="form-control shadow-sm" placeholder="Enter product type ID" />
+                            <span asp-validation-for="ProdTypeId" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-check-circle"></i> Save Product
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<!-- FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

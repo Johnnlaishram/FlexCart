@@ -15,6 +15,8 @@ namespace FlexCart.Controllers
 
         public IActionResult Index()
         {
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            ViewBag.Email = userEmail; // Send to view
             return View();
         }
 
@@ -28,6 +30,10 @@ namespace FlexCart.Controllers
         }
         public IActionResult About() {
             return View();
+        }
+        public IActionResult products()
+        {
+            return View(); 
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

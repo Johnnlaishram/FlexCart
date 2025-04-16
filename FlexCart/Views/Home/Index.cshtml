@@ -1,1 +1,41 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to FlexCart</h1>
+
+    @if (ViewBag.Email != null)
+    {
+        <div class="alert alert-success mt-3">
+            <strong>Hello,</strong> @ViewBag.Email 👋 — you’re logged in!
+        </div>
+
+        <a asp-controller="Login" asp-action="Logout" class="btn btn-danger mt-2">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    }
+    else
+    {
+        <div class="alert alert-info mt-3">
+            You are not logged in. Please <a asp-controller="login" asp-action="login">Login</a>.
+        </div>
+    }
+
+    <hr />
+
+    <h2 class="mt-5">Featured Products</h2>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">Product Name</h5>
+                    <p class="card-text">Product description goes here...</p>
+                    <a href="#" class="btn btn-primary">Buy Now</a>
+                </div>
+            </div>
+        </div>
+        <!-- You can copy this col-md-4 for more product cards -->
+    </div>
+</div>
