@@ -15,6 +15,7 @@ public partial class OnlineDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Admin> Admins { get; set; }    
     public virtual DbSet<Company> Companies { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }
@@ -40,6 +41,22 @@ public partial class OnlineDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Admin>(entity =>
+        {
+            entity.HasKey(e => e.AdminId).HasName("PK_Admin");
+
+            entity.ToTable("admin");
+
+            entity.Property(e => e.AdminId)
+            .HasColumnName("admin_id");
+            entity.Property(e => e.UserName)
+            .HasColumnName("user_name");
+            entity.Property(e => e.Password)
+            .HasColumnName("password");
+            entity.Property(e => e.Email)
+            .HasColumnName("email");
+
+        });
         modelBuilder.Entity<Company>(entity =>
         {
             entity.HasKey(e => e.CompanyId).HasName("PK_Company");
@@ -96,7 +113,7 @@ public partial class OnlineDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("name");
-           entity.Property(e => e.Password) // ADD THIS
+           entity.Property(e => e.Password) 
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("password");
@@ -116,9 +133,6 @@ public partial class OnlineDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("barcode");
-            entity.Property(e => e.ManfDate)
-                .HasColumnType("datetime")
-                .HasColumnName("manf_date");
             entity.Property(e => e.ProdName)
                 .HasMaxLength(50)
                 .IsUnicode(false)

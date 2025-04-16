@@ -1,0 +1,33 @@
+﻿@model List<FlexCart.Models.Product>
+
+<h2>Product List</h2>
+<a href="/Product/Create" class="btn btn-primary mb-3">Add Product</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Barcode</th>
+            <th>Photo</th>
+            <th>Type ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProdCode</td>   <!-- ✅ Correct based on your model -->
+                <td>@item.ProdName</td>
+                <td>@item.Barcode</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ProdPhoto))
+                    {
+                        <img src="@item.ProdPhoto" width="80" />
+                    }
+                </td>
+                <td>@item.ProdTypeId</td>
+            </tr>
+        }
+    </tbody>
+</table>

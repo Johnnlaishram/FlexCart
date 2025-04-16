@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;//enable mvc feature(controller&view)
-using FlexCart.Models; //importing the model folder
-using System.Linq; // enable linq query
-using System.Threading.Tasks;//enable async/awaite operation
-using Microsoft.EntityFrameworkCore;//enable the database operations
+﻿using Microsoft.AspNetCore.Mvc;
+using FlexCart.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 
 namespace FlexCart.Controllers
 {
@@ -14,25 +13,52 @@ namespace FlexCart.Controllers
         {
             _context = context;
         }
-        
-        //get product(list all product)
+
         public async Task<IActionResult> Index()
         {
             var products = await _context.Products.ToListAsync();
             return View(products);
         }
-        //get create /product(show create form) this show the empty form when user visit product/create
-        public IActionResult create()
+
+        public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProdCode,ProdName,ManfDate,Barcode,ProdPhoto,ProdTypeId")] Product product)
+        public async Task<IActionResult> Create(Product product)
         {
-            _context.Add(product);  // No validation check
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                // Save image to wwwroot/productImages
+                if (product.ImageFile != null)
+                {
+                    string folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Product_pho");
+                    Directory.CreateDirectory(folder);
+                    string fileName = Guid.NewGuid().ToString() + "_" + product.ImageFile.FileName;
+                    string filePath = Path.Combine(folder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await product.ImageFile.CopyToAsync(stream);
+                    }
+
+                    product.ProdPhoto = "/Product_pho/" + fileName;
+                }
+
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC insert_product @prod_name, @barcode, @prod_photo, @prod_type_id",
+                    new SqlParameter("@prod_name", product.ProdName),
+                    new SqlParameter("@barcode", product.Barcode),
+                    new SqlParameter("@prod_photo", product.ProdPhoto),
+                    new SqlParameter("@prod_type_id", product.ProdTypeId));
+
+                await _context.SaveChangesAsync();
+                TempData["successMessage"] = "Product added successfully!";
+                return RedirectToAction("Index");
+            }
+
+            return View(product);
         }
     }
 }

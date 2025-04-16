@@ -1,0 +1,133 @@
+﻿.privacy-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.privacy-hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--primary-color), #2c3e50);
+    color: black;
+    border-radius: 15px;
+    margin-bottom: 3rem;
+}
+
+    .privacy-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .privacy-hero p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+.privacy-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.privacy-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+    .privacy-card:hover {
+        transform: translateY(-5px);
+    }
+
+.icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+    .icon-wrapper i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+.privacy-card h2 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-card p {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.privacy-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+    .privacy-card ul li {
+        padding: 0.5rem 0;
+        color: #555;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+        .privacy-card ul li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+
+.privacy-card.contact {
+    text-align: center;
+}
+
+.contact-btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 25px;
+    text-decoration: none;
+    margin: 1rem 0;
+    transition: background 0.3s ease;
+}
+
+    .contact-btn:hover {
+        background: #2c3e50;
+    }
+
+.contact-email {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .privacy-hero {
+        padding: 3rem 1rem;
+    }
+
+        .privacy-hero h1 {
+            font-size: 2.5rem;
+        }
+
+    .privacy-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .privacy-card {
+        padding: 1.5rem;
+    }
+}

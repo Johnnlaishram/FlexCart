@@ -1,59 +1,202 @@
-﻿@model IEnumerable<FlexCart.Models.Customer>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlexCart - Shopping Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@{
-    ViewData["Title"] = "Customer List";
-}
+    <!-- Bootstrap & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-<div class="container mt-5">
-    <!-- Header with Create Button -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold"><i class="fas fa-users"></i> Customer List</h2>
-        <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">
-            <i class="fas fa-plus"></i> Create New Customer
-        </a>
-    </div>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+        }
 
-    <!-- Table Design -->
-    <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-body">
-            <table class="table table-striped table-bordered text-center align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Masked Password</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var customer in Model)
-                    {
-                        <tr>
-                            <td>@customer.Name</td>
-                            <td>@customer.Address</td>
-                            <td>@customer.Email</td>
-                            <td>@customer.Mobile</td>
-                            <td>*******</td>
-                            <td class="text-center">
-                                <a asp-action="Edit" asp-route-id="@customer.CusId" class="btn btn-warning btn-sm me-1">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <a asp-action="Details" asp-route-id="@customer.CusId" class="btn btn-info btn-sm me-1">
-                                    <i class="fas fa-info-circle"></i> Details
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@customer.CusId" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: -200px;
+            background-color: #007bff;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            z-index: 1050;
+        }
+
+            .sidebar a {
+                padding: 10px 15px;
+                text-decoration: none;
+                font-size: 18px;
+                color: white;
+                display: block;
+                transition: 0.3s;
+            }
+
+                .sidebar a:hover {
+                    background-color: #0056b3;
+                    color: #f1f1f1;
+                }
+
+            .sidebar .closebtn {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                font-size: 30px;
+                color: white;
+            }
+
+        #sidebarToggle {
+            font-size: 25px;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .product-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+
+            .product-box:hover {
+                transform: scale(1.03);
+            }
+
+        .product-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .product-details {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Main container -->
+    <div class="container mt-5 flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Welcome to FlexCart</h1>
+            <span id="sidebarToggle"><i class="fas fa-bars"></i> Menu</span>
+        </div>
+
+        <div class="alert alert-success">
+            <strong>Hello,</strong> @ViewBag.Email 👋 — enjoy shopping with us!
+        </div>
+
+        <!-- Sidebar -->
+        <div id="mySidebar" class="sidebar">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="#"><i class="fas fa-user me-1"></i> My Account</a>
+            <a href="#"><i class="fas fa-box me-1"></i> My Orders</a>
+            <a href="#"><i class="fas fa-heart me-1"></i> Wishlist</a>
+            <a href="@Url.Action("Logout", "Customer")"fas fa-sign-out-alt me-1"></i> Logout</a>
+        </div>
+
+        <!-- Products Section -->
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="product-box">
+                    <img src="~/image/photo-1600185365483-26d7a4cc7519.jpeg" alt="Air Max" class="product-img">
+                    <div class="product-details">
+                        <div class="product-title">Air Max</div>
+                        <div class="product-price">₹1,499</div>
+                        <button class="btn btn-primary w-100">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-box">
+                    <img src="~/image/photo-1600269452121-4f2416e55c28.jpeg" alt="Nike" class="product-img">
+                    <div class="product-details">
+                        <div class="product-title">Nike</div>
+                        <div class="product-price">₹999</div>
+                        <button class="btn btn-primary w-100">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-box">
+                    <img src="~/image/photo-1549298916-f52d724204b4.jpeg" alt="Nike" class="product-img">
+                    <div class="product-details">
+                        <div class="product-title">Nike</div>
+                        <div class="product-price">₹1,299</div>
+                        <button class="btn btn-primary w-100">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-box">
+                    <img src="~/image/photo-1491553895911-0055eca6402d.jpeg" alt="Adidas" class="product-img">
+                    <div class="product-details">
+                        <div class="product-title">Adidas</div>
+                        <div class="product-price">₹1,199</div>
+                        <button class="btn btn-primary w-100">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="product-box">
+                    <img src="~/image/photo-1549298916-f52d724204b4.jpeg" alt="Adidas" class="product-img">
+                    <div class="product-details">
+                        <div class="product-title">Adidas</div>
+                        <div class="product-price">₹1,299</div>
+                        <button class="btn btn-primary w-100">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- FontAwesome for Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="mb-0">Follow us on:</p>
+            <a href="" class="text-white me-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/fle_xcart?igsh=MWwyejR4a2RoNG9odQ==" class="text-white"><i class="fab fa-instagram"></i></a>
+        &copy; 2025 FlexCart. All rights reserved.
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.left = "0";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.left = "-200px";
+        }
+        document.getElementById("sidebarToggle").onclick = openNav;
+    </script>
+</body>
+</html>

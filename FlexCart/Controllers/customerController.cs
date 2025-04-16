@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using FlexCart.Models;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlexCart.Controllers
 {
@@ -18,11 +20,19 @@ namespace FlexCart.Controllers
             _context = context;
         }
 
+    
+
         public IActionResult Index()
         {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email != null)
+            {
+                ViewBag.Email = email;
+            }
             var customers = _context.Customers.ToList();
             return View(customers);
         }
+
 
         public IActionResult Create()
         {
@@ -46,8 +56,8 @@ namespace FlexCart.Controllers
                     new SqlParameter("@mobile", customer.Mobile),
                     new SqlParameter("@password",customer.Password));
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Customer added successfully!";
-                return RedirectToAction("Index");
+                TempData["SuccessMessage1"] = "Customer added successfully!";
+                return RedirectToAction("login","customer");
             }
             return View(customer);
         }
@@ -82,7 +92,7 @@ namespace FlexCart.Controllers
                         new SqlParameter("@password", customer.Password));
                     await _context.SaveChangesAsync();
                     TempData["successMessage"] = "Edit sucessfully";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("CustomerList","admin");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,7 +133,7 @@ namespace FlexCart.Controllers
                 "EXEC delete_customer @cus_id",
                 new SqlParameter("@cus_id", id));//pass int directly,no need to convert
             TempData["sucessmessage"] = "company added sucessfully";
-            return RedirectToAction("Index");
+            return RedirectToAction("CustomerList","admin");
             }
             catch (Exception ex)
             {
@@ -131,6 +141,43 @@ namespace FlexCart.Controllers
                     return RedirectToAction("delete", new { id });//redirect to the confirmation page 
             }//stay on the same page if an error occurs
         }
+        // GET: /Customer/Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View(); // This renders Views/Customer/Login.cshtml
+        }
+
+        // POST: /Customer/Login
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            var user = await _context.Customers
+                .FromSqlRaw("EXEC customer_login @email, @password",
+                    new SqlParameter("@email", email),
+                    new SqlParameter("@password", password))
+                .ToListAsync();
+
+            if (user.Count > 0)
+            {
+                HttpContext.Session.SetString("UserEmail", email);
+                TempData["successfulMessage"] = "Login successful!";
+                return RedirectToAction("index", "Customer");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View();
+            }
+        }
+
+        // Logout Action
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("login", "Customer");
+        }
+
     }
 
 }

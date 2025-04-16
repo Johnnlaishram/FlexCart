@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold"><i class="fas fa-tools"></i> Admin Dashboard</h3>
+
+        <div class="text-end">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success mb-2">@TempData["SuccessMessage"]</div>
+            }
+            @if (ViewBag.Email != null)
+            {
+                <div class="mb-2">
+                    <strong>Hello,</strong> @ViewBag.Email 👋 — you’re logged in!
+                </div>
+                <a asp-controller="Admin" asp-action="Logout" class="btn btn-outline-danger btn-sm rounded-pill">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            }
+        </div>
+    </div>
+
+    <!-- Metric Cards -->
+    <div class="row g-4">
+        <!-- Manage Companies -->
+        <div class="col-md-4 d-flex">
+            <div class="card h-100 w-100 border-0 shadow rounded-4 text-center p-4">
+                <i class="fas fa-building fa-3x text-primary mb-3"></i>
+                <h5 class="fw-bold">Manage Companies</h5>
+                <p class="text-muted">View, add, edit, or delete companies.</p>
+                <a asp-controller="Admin" asp-action="CompanyList" class="btn btn-primary rounded-pill px-4">View Companies</a>
+                <div class="mt-3">
+                    <span class="fw-bold">Total Companies: @ViewBag.CompanyCount</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Admins -->
+        <div class="col-md-4 d-flex">
+            <div class="card h-100 w-100 border-0 shadow rounded-4 text-center p-4">
+                <i class="fas fa-user fa-3x text-success mb-3"></i>
+                <h5 class="fw-bold">Add Admins</h5>
+                <p class="text-muted">Create new admin accounts.</p>
+                <a asp-controller="Admin" asp-action="Create" class="btn btn-success rounded-pill px-4">Add Admin</a>
+                <div class="mt-3">
+                    <span class="fw-bold">Total Admins: @ViewBag.AdminCount</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Customers -->
+        <div class="col-md-4 d-flex">
+            <div class="card h-100 w-100 border-0 shadow rounded-4 text-center p-4">
+                <i class="fas fa-users fa-3x text-success mb-3"></i>
+                <h5 class="fw-bold">Manage Customers</h5>
+                <p class="text-muted">Access customer data and perform actions.</p>
+                <a asp-controller="Admin" asp-action="CustomerList" class="btn btn-success rounded-pill px-4">View Customers</a>
+                <div class="mt-3">
+                    <span class="fw-bold">Total Customers: @ViewBag.CustomerCount</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Inventory -->
+        <div class="col-md-4 d-flex">
+            <div class="card h-100 w-100 border-0 shadow rounded-4 text-center p-4">
+                <i class="fas fa-box-open fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">Product Inventory</h5>
+                <p class="text-muted">Track and manage products from all companies.</p>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-warning rounded-pill px-4">View Products</a>
+            </div>
+        </div>
+
+        <!-- Sales Analytics -->
+        <div class="col-md-4 d-flex">
+            <div class="card h-100 w-100 border-0 shadow rounded-4 text-center p-4" style="background-color: #f8f9fa;">
+                <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
+                <h5 class="fw-bold">Sales Analytics</h5>
+                <p class="text-muted">View sales data and analytics.</p>
+                <a asp-controller="Admin" asp-action="SalesAnalytics" class="btn btn-info rounded-pill px-4">View Analytics</a>
+            </div>
+        </div>
+   
+        <!--company accpt and delete part-->
+       <div class="col-md-4 d-flex">
+          <div class="card h-100 w-100 border-0 shadow rounded-4 text-center p-4">
+            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+            <h5 class="fw-bold">Product Approval</h5>
+            <p class="text-muted">Approve or reject company requests.</p>
+            <a asp-controller="Admin" asp-action="Product_approval" class="btn btn-success rounded-pill px-4">Manage Approval</a>
+        </div>
+       </div>
+</div>
+    <!-- Footer -->
+    <div class="text-center mt-5">
+        <small class="text-muted">Admin Access Only • FlexCart &copy; 2025</small>
+    </div>
+</div>

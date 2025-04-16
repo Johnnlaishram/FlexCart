@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\NewFolder\StyleSheet1.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\StyleSheet.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\js\.DS_Store" />
   </ItemGroup>
 
@@ -26,6 +31,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Product_pho\" />
   </ItemGroup>
 
 </Project>
