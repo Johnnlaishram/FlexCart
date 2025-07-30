@@ -1,13 +1,17 @@
-
-using FlexCart.Models;
+﻿using FlexCart.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ✅ ADD THIS LINE before `builder.Build();`
+builder.WebHost.UseUrls("http://0.0.0.0:80");
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<OnlineDbContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<OnlineDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddDistributedMemoryCache(); // Needed for session storage
 
 builder.Services.AddSession(options =>
@@ -16,22 +20,20 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
- app.UseHttpsRedirection();
+
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -39,4 +41,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
